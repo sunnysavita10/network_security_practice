@@ -87,7 +87,7 @@ class DataTransformation:
         try:
             logging.info("Starting data transformation")
             
-            os.makedirs(self.data_transformation_config.transformed_data_dir, exist_ok=True)
+            #os.makedirs(self.data_transformation_config.transformed_data_dir, exist_ok=True)
             
             train_df = DataTransformation.read_data(self.data_validation_artifact.valid_train_file_path)
             test_df = DataTransformation.read_data(self.data_validation_artifact.valid_test_file_path)
