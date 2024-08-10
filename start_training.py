@@ -2,6 +2,7 @@ import sys
 import os
 
 from networksecurity.exception.exception import NetworkSecurityException
+from networksecurity.logger.logger import logging
 from networksecurity.pipeline.training_pipeline import TrainingPipeline
 
 def start_training():

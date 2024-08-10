@@ -11,7 +11,7 @@ from networksecurity.components.model_pusher import ModelPusher
 
 #importing exception and logging module
 from networksecurity.exception.exception import NetworkSecurityException
-from networksecurity.logger.logger import NetworkSecurityLogger
+from networksecurity.logger.logger import logging
 
 #importing configuration entity
 from networksecurity.entity.config_entity import (
@@ -20,7 +20,8 @@ from networksecurity.entity.config_entity import (
     DataTransformationConfig,
     ModelTrainerConfig,
     ModelEvaluationConfig,
-    ModelPusherConfig
+    ModelPusherConfig,
+    TrainingPipelineConfig
 )
 
 #importing artifact entity
@@ -38,13 +39,20 @@ from networksecurity.entity.artifact_entity import (
 class TrainingPipeline:
     is_pipeline_running = False
     def __init__(self):
-        pass
+        self.training_pipeline_config = TrainingPipelineConfig()
+        
     
     def start_data_ingestion(self):
         """_summary_
         """
         try:
-            pass
+            self.data_ingestion_config = DataIngestionConfig(training_pipeline_config=self.training_pipeline_config)
+            logging.info("Starting data ingestion")
+            data_ingestion = DataIngestion(data_ingestion_config=self.data_ingestion_config)
+            data_ingestion_artifact = data_ingestion.initiate_data_ingestion()
+            logging.info(f"Data ingestion completed and artifact: {data_ingestion_artifact}")
+            return data_ingestion_artifact
+            
         except Exception as e:
             raise NetworkSecurityException(e, sys) 
     
@@ -93,11 +101,11 @@ class TrainingPipeline:
             TrainingPipeline.is_pipeline_running = True
             
             self.start_data_ingestion()
-            self.start_data_validation()
-            self.start_data_transformation()
-            self.model_training()
-            self.model_evaluation()
-            self.model_pusher()
+            #self.start_data_validation()
+            #self.start_data_transformation()
+            #self.model_training()
+            #self.model_evaluation()
+            #self.model_pusher()
             
         except Exception as e:
             raise NetworkSecurityException(e, sys)
