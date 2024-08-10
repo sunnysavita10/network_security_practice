@@ -5,7 +5,8 @@ import os
 
 from dotenv import load_dotenv
 load_dotenv()
-MONGODB_URL=os.getenv("MONGODB_URL")
+MONGO_DB_URL=os.getenv("MONGO_DB_URL")
+#print(MONGO_DB_URL)
 
 import certifi
 ca = certifi.where()
@@ -15,7 +16,6 @@ import numpy as np
 import pymongo
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logger.logger import logging
-
 
 class NetworkDataExtract():
     def __init__(self):
@@ -42,11 +42,12 @@ class NetworkDataExtract():
         if database_name is not None:
             try:
                 
+                print(MONGO_DB_URL)
                 self.records=records
                 self.database_name=database_name
                 self.collection_name=collection_name
-                
-                self.client = pymongo.MongoClient(MONGODB_URL)
+                #print(self.records)
+                self.client = pymongo.MongoClient(MONGO_DB_URL)
                 
                 self.client.admin.command('ping')
                 print("Pinged your deployment. You successfully connected to MongoDB!")
@@ -81,11 +82,10 @@ class NetworkDataExtract():
         
 if __name__=='__main__':
     DATA_FILE_PATH="./networkdata/network_data.csv"
-    DATABASE_NAME="KNAcademy"
-    COLLECTION_NAME="NetworkSecurity"
+    DATABASE_NAME="KNAcd"
+    COLLECTION_NAME="NetworkSecurityData"
     networkdata=NetworkDataExtract()
     records = networkdata.csv_to_json_convertor(DATA_FILE_PATH)
     inserted_record=networkdata.pushing_data_to_mongodb(records,DATABASE_NAME,COLLECTION_NAME)
     print(inserted_record)
-    
     
