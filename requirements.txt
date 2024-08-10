@@ -4,5 +4,6 @@ pymongo
 scikit-learn
 dill
 pyyaml
+imblearn
 
 -e .
