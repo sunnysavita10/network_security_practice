@@ -20,12 +20,18 @@ load_dotenv()
 MONGO_DB_URL=os.getenv("MONGO_DB_URL")
 
 class DataIngestion:
-    def __init__(self):
-        pass
-    
-    def export_collection_as_dataframe(
-        self, collection_name: str, database_name: Optional[str] = None) -> pd.DataFrame:
+    def __init__(self,data_ingestion_config:DataIngestionConfig):
+        
         try:
+            self.data_ingestion_config=data_ingestion_config
+        except Exception as e:
+            raise NetworkSecurityException(e,sys)
+    
+    def export_collection_as_dataframe(self) -> pd.DataFrame:
+        try:
+            database_name=self.data_ingestion_config.database_name
+            collection_name=self.data_ingestion_config.collection_name
+            
             self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
             collection = self.mongo_client[database_name][collection_name]
             df = pd.DataFrame(list(collection.find()))
@@ -40,25 +46,50 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e, sys)
         
-    def export_data_into_feature_store(self):
+    def export_data_into_feature_store(self,dataframe):
         try:
-            pass
+            feature_store_file_path = self.data_ingestion_config.feature_store_file_path
+            
+            #creating folder
+            dir_path = os.path.dirname(feature_store_file_path)
+            os.makedirs(dir_path,exist_ok=True)
+            dataframe.to_csv(feature_store_file_path,index=False,header=True)
+            return dataframe
+               
         except Exception as e:
             raise NetworkSecurityException(e, sys)
     
-    def split_data_as_train_test(self):
+    def split_data_as_train_test(self,dataframe: pd.DataFrame)-> None:
         try:
-            pass
+            train_set, test_set = train_test_split(
+                dataframe, test_size=self.data_ingestion_config.train_test_split_ratio
+            )
+            logging.info("Performed train test split on the dataframe")
+
+            logging.info(
+                "Exited split_data_as_train_test method of Data_Ingestion class"
+            )
+             
+            dir_path = os.path.dirname(self.data_ingestion_config.training_file_path)
+            os.makedirs(dir_path, exist_ok=True)
+            logging.info(f"Exporting train and test file path.")
+            train_set.to_csv(
+                self.data_ingestion_config.training_file_path, index=False, header=True
+            )
+
+            test_set.to_csv(
+                self.data_ingestion_config.testing_file_path, index=False, header=True
+            )
+
+            logging.info(f"Exported train and test file path.")
+            
         except Exception as e:
             raise NetworkSecurityException(e,sys)
     
     def initiate_data_ingestion(self):
         try:
-            DATABASE_NAME="KNAcd"
-            COLLECTION_NAME="NetworkSecurityData"
-            dataframe = self.export_collection_as_dataframe(DATABASE_NAME,COLLECTION_NAME)
-            dataframe = self.export_data_into_feature_store
-            dataframe = dataframe.drop(self._schema_config["drop_columns"],axis=1)
+            dataframe = self.export_collection_as_dataframe()
+            dataframe = self.export_data_into_feature_store()
             self.split_data_as_train_test(dataframe=dataframe)
             
             data_ingestion_artifact = DataIngestionArtifact(trained_file_path=self.data_ingestion_config.training_file_path,
@@ -69,8 +100,6 @@ class DataIngestion:
             raise NetworkSecurityException(e,sys)
         
 if __name__ == '__main__':
-    DATABASE_NAME="KNAcd"
-    COLLECTION_NAME="NetworkSecurityData"
     data_ingestion = DataIngestion()
-    dataframe = data_ingestion.export_collection_as_dataframe(DATABASE_NAME,COLLECTION_NAME)
-    print(dataframe)
+    data_ingestion_artifact = data_ingestion.initiate_data_ingestion()
+    print(data_ingestion_artifact)
