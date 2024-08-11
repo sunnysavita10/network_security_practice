@@ -14,8 +14,8 @@ from networksecurity.entity.artifact_entity import (
 from networksecurity.entity.config_entity import DataTransformationConfig
 from networksecurity.exception.exception import NetworkSecurityException 
 from networksecurity.logger.logger import logging
-from networksecurity.ml.model.estimator import TargetValueMapping
-from networksecurity.utils.utils import save_numpy_array_data, save_object
+#from networksecurity.utils.ml_utils.model.estimator import TargetValueMapping
+from networksecurity.utils.main_utils.utils import save_numpy_array_data, save_object
 
 
 
