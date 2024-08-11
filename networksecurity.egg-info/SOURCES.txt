@@ -15,7 +15,7 @@ networksecurity/components/model_evaluation.py
 networksecurity/components/model_pusher.py
 networksecurity/components/model_trainer.py
 networksecurity/constant/__init__.py
-networksecurity/constant/training_pipeline.py
+networksecurity/constant/training_pipeline/__init__.py
 networksecurity/entity/__init__.py
 networksecurity/entity/artifact_entity.py
 networksecurity/entity/config_entity.py
@@ -26,4 +26,10 @@ networksecurity/logger/logger.py
 networksecurity/pipeline/__init__.py
 networksecurity/pipeline/training_pipeline.py
 networksecurity/utils/__init__.py
-networksecurity/utils/utils.py
+networksecurity/utils/main_utils/__init__.py
+networksecurity/utils/main_utils/utils.py
+networksecurity/utils/ml_utils/__init__.py
+networksecurity/utils/ml_utils/metric/__init__.py
+networksecurity/utils/ml_utils/metric/classification_metric.py
+networksecurity/utils/ml_utils/model/__init__.py
+networksecurity/utils/ml_utils/model/estimator.py

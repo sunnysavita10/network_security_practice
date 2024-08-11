@@ -148,6 +148,6 @@ class TrainingPipeline:
             #self.sync_saved_model_dir_to_s3()
             
         except Exception as e:
-            self.sync_artifact_dir_to_s3()
-            TrainingPipeline.is_pipeline_running=False
+            #self.sync_artifact_dir_to_s3()
+            #TrainingPipeline.is_pipeline_running=False
             raise NetworkSecurityException(e, sys)

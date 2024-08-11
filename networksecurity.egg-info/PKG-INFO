@@ -5,3 +5,11 @@ Author: sunny savita
 Author-email: snshrivas3365@gmail.com
 License-File: LICENSE
 Requires-Dist: pandas
+Requires-Dist: python-dotenv
+Requires-Dist: pymongo
+Requires-Dist: scikit-learn
+Requires-Dist: dill
+Requires-Dist: pyyaml
+Requires-Dist: imblearn
+Requires-Dist: xgboost
+Requires-Dist: certifi
